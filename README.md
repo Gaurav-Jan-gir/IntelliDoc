@@ -2,7 +2,7 @@
 
 > **AI-Powered Document Q&A Platform using Retrieval-Augmented Generation (RAG)**
 
-IntelliDoc is a high-performance, production-ready document question-answering platform. It allows users to upload PDF documents, intelligently chunks and embeds them into a dense vector space, indexes them using FAISS for low-latency similarity search, and queries Google Gemini (`gemini-2.0-flash`) with retrieved document passages to provide factually grounded answers with source citations.
+IntelliDoc is a high-performance, production-ready document question-answering platform. It allows users to upload PDF documents, intelligently chunks and embeds them into a dense vector space, indexes them using FAISS for low-latency similarity search, and queries Google Gemini (`gemini-3.8-flash`) with retrieved document passages to provide factually grounded answers with source citations.
 
 ---
 
@@ -46,7 +46,7 @@ flowchart TD
 - **Document Ingestion & Deduplication**: Fast text extraction from PDF pages with MD5 checksum verification to prevent duplicate storage.
 - **Context-Preserving Recursive Chunking**: Splits large documents into overlapping text segments while preserving page numbers and document provenance.
 - **Dense Vector Search**: Powered by `sentence-transformers` (`all-MiniLM-L6-v2`) and local `FAISS` (`IndexFlatL2`) similarity search.
-- **LLM Grounding & Factuality**: Leverages Google Gemini (`gemini-2.0-flash`) instructed with strict context adherence to prevent hallucinations.
+- **LLM Grounding & Factuality**: Leverages Google Gemini (`gemini-3.8-flash`) instructed with strict context adherence to prevent hallucinations.
 - **Transparent Citations**: Every generated response includes reference passages, source file names, page numbers, and vector distance metrics.
 - **Interactive Web Interface**: Streamlit UI with document management, responsive chat conversation history, and real-time backend health monitoring.
 - **RESTful API**: Standardized FastAPI endpoints with automatic OpenAPI documentation (`/docs` and `/redoc`).
@@ -62,7 +62,7 @@ flowchart TD
 | **Vector Store** | [FAISS](https://github.com/facebookresearch/faiss) | Efficient library for dense vector similarity search |
 | **Embeddings** | [Sentence-Transformers](https://sbert.net/) | Local `all-MiniLM-L6-v2` dense embedding model |
 | **LLM Orchestration**| [LangChain](https://www.langchain.com/) | Document text splitting and chunking |
-| **LLM Generation** | [Google Gemini](https://ai.google.dev/) | `gemini-2.0-flash` generative AI model |
+| **LLM Generation** | [Google Gemini](https://ai.google.dev/) | `gemini-3.8-flash` generative AI model |
 | **Frontend UI** | [Streamlit](https://streamlit.io/) | Interactive web UI for chat and file uploads |
 | **PDF Extraction** | [PyPDF2](https://pypdf2.readthedocs.io/) | PDF text and page metadata extraction |
 | **Metadata DB** | [SQLite](https://sqlite.org/) | Lightweight relational database for document metadata |

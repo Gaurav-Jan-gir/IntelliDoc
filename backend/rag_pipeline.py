@@ -205,23 +205,25 @@ class RAGPipeline:
             FileNotFoundError: If the PDF file does not exist.
             ValueError: If the PDF contains no extractable text.
         """
-        from PyPDF2 import PdfReader
+        import pymupdf4llm
 
         pdf_path = Path(filepath)
         if not pdf_path.exists():
             raise FileNotFoundError(f"PDF file not found: {pdf_path}")
 
-        reader = PdfReader(str(pdf_path))
-        pages_content: List[Tuple[str, int]] = []
-
-        for page_idx, page in enumerate(reader.pages, start=1):
-            try:
-                text = page.extract_text() or ""
-                cleaned = text.strip()
-                if cleaned:
-                    pages_content.append((cleaned, page_idx))
-            except Exception as e:
-                logger.warning(f"Error extracting text from page {page_idx} of {pdf_path.name}: {e}")
+        try:
+            md_docs = pymupdf4llm.to_markdown(str(pdf_path), page_chunks=True)
+            pages_content: List[Tuple[str, int]] = []
+            
+            for doc in md_docs:
+                page_idx = doc.get("metadata", {}).get("page", 0) + 1  # 1-indexed
+                text = doc.get("text", "").strip()
+                if text:
+                    pages_content.append((text, page_idx))
+                    
+        except Exception as e:
+            logger.warning(f"Error extracting text with pymupdf4llm: {e}")
+            pages_content = []
 
         if not pages_content:
             raise ValueError(
@@ -415,7 +417,7 @@ class RAGPipeline:
             import google.generativeai as genai
 
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel(model_name="gemini-2.0-flash")
+            model = genai.GenerativeModel(model_name="gemini-3.8-flash")
             response = model.generate_content(prompt)
 
             answer = response.text if response and response.text else (
